@@ -664,6 +664,7 @@
   @media(max-width:600px){
     section{padding:18px 18px 22px;}
     .section-idx{top:14px;right:16px;font-size:10px;}
+    body.lang-rtl .section-idx{right:auto;left:16px;}
     .eyebrow{font-size:9.5px;margin-bottom:12px;gap:7px;}
     .eyebrow::before{width:18px;}
     h1{font-size:clamp(35px,11.5vw,56px);}
@@ -748,10 +749,12 @@
     overflow:hidden; padding:18px 0;
     -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
     mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+    direction:ltr; /* keep the decorative loop physically LTR regardless of page language */
   }
   .cover-marquee .track{
     display:flex; align-items:center; gap:72px; width:max-content;
     animation:marquee-scroll 30s linear infinite;
+    direction:ltr;
   }
   .cover-marquee .item{ display:flex; align-items:center; gap:72px; flex:none; }
   .cover-marquee img{
@@ -1522,7 +1525,7 @@
   <!-- 09 INBOUND BHS -->
   <section id="s12">
     <div class="section-idx"><span class="i18n-en" style="display:none"><b>12</b> / 13 · Inbound BHS</span><span class="i18n-zh"><b>12</b> / 13 · 进港BHS</span><span class="i18n-ar" style="display:none"><b>12</b> / 13 · نظام مناولة أمتعة الوصول</span></div>
-    <div class="eyebrow">4.4 Description of BHS Design</div>
+    <div class="eyebrow"><span class="i18n-en" style="display:none">4.4 Description of BHS Design</span><span class="i18n-zh">4.4 BHS 设计说明</span><span class="i18n-ar" style="display:none">4.4 وصف تصميم نظام مناولة الأمتعة</span></div>
     <h2><span class="i18n-en" style="display:none">Arrivals<br>reclaim</span><span class="i18n-zh zh-oneline">到达行李提取</span><span class="i18n-ar ar-oneline" style="display:none">استلام أمتعة الوافدين</span></h2>
     <div class="grid2" style="margin-top:28px;">
       <div>
@@ -2066,6 +2069,15 @@ m1730 -1437 c-132 -133 -309 -318 -394 -411 l-155 -167 -8 32 c-12 48 -35 77
      lists flip to right-aligned reading order for legibility. */
   body.lang-rtl{ }
   body.lang-rtl .i18n-ar{ direction:rtl; unicode-bidi:isolate; text-align:right; }
+  /* The eyebrow row and the section-idx badge are both anchored to the same
+     top corner; in LTR/ZH the eyebrow starts from the left so they never meet,
+     but in RTL the eyebrow also hugs the right edge and collides with the
+     badge. Move the badge to the opposite (top-left) corner in RTL instead of
+     pushing the eyebrow down — sections vertically center their content, so
+     adding margin there created an oversized gap on short slides. */
+  body.lang-rtl .section-idx{
+    right:auto; left:clamp(24px,6vw,90px);
+  }
   body.lang-rtl p.lede,
   body.lang-rtl .eyebrow,
   body.lang-rtl h1, body.lang-rtl h2, body.lang-rtl h3,
