@@ -844,10 +844,15 @@
     display:flex; align-items:center; gap:14px; width:100%; overflow:visible;
   }
   .signature-wrap{
-    flex:1; display:flex; align-items:center; justify-content:center; overflow:visible;
+    flex:1; display:flex; align-items:center; justify-content:center;
+    overflow:visible; min-width:0;
   }
   .signature-wrap svg{
-    width:260%; height:auto; display:block; transform:rotate(-8deg);
+    /* Fixed, viewport-based size — independent of the flex container's
+       width, which otherwise shifts with how much the language text
+       above wraps (EN/ZH/AR differ a lot in length). */
+    width:clamp(150px,15vw,190px); max-width:none; height:auto;
+    flex:none; display:block; transform:rotate(-8deg);
     fill:#f4f6fb !important;
   }
 
@@ -875,6 +880,7 @@
     .fixed-logos img{ height:22px; }
     .credit-box{ padding:16px; gap:12px; }
     .credit-box .qr-wrap{ width:80px; height:80px; }
+    .signature-wrap svg{ width:clamp(110px,26vw,150px); }
   }
 
   /* ================= INTRO — animated logo reveal ================= */
