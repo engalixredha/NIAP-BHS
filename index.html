@@ -2076,10 +2076,9 @@ m1730 -1437 c-132 -133 -309 -318 -394 -411 l-155 -167 -8 32 c-12 48 -35 77
 </style>
 <script>
   (function(){
-    // Show a small language widget on the first slide when the device/browser
-    // language isn't English. Starts as a compact rectangle; clicking it opens
-    // the list of English / Arabic / Chinese. Selection is stored but doesn't
-    // translate the page content yet.
+    // Language widget: English / Arabic / Chinese. Shown only on the cover
+    // slide (s0), regardless of the device/browser language. Starts as a
+    // compact rectangle; clicking it opens the list.
     try {
       var devLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
       var isEnglish = devLang.indexOf('en') === 0;
@@ -2119,38 +2118,37 @@ m1730 -1437 c-132 -133 -309 -318 -394 -411 l-155 -167 -8 32 c-12 48 -35 77
       // wrong language on first paint.
       applyLang(initialLang);
 
-      if (!isEnglish) {
-        // Only show the widget while slide s0 (the chapter cover) is active.
-        var s0 = document.getElementById('s0');
-        function syncVisibility(){
-          var active = s0 && s0.classList.contains('active');
-          widget.style.display = active ? 'block' : 'none';
-          if (!active) list.style.display = 'none';
-        }
-        if (s0) {
-          var moLang = new MutationObserver(syncVisibility);
-          moLang.observe(s0, {attributes:true, attributeFilter:['class']});
-        }
-        syncVisibility();
-
-        toggle.addEventListener('click', function(){
-          list.style.display = (list.style.display === 'none') ? 'block' : 'none';
-        });
-
-        list.querySelectorAll('button[data-lang]').forEach(function(btn){
-          btn.addEventListener('click', function(){
-            var lang = btn.getAttribute('data-lang');
-            sessionStorage.setItem('preferredLang', lang);
-            toggleLabel.textContent = btn.getAttribute('data-label');
-            list.style.display = 'none';
-            applyLang(lang);
-          });
-        });
-
-        document.addEventListener('click', function(e){
-          if (!widget.contains(e.target)) list.style.display = 'none';
-        });
+      // The widget is shown only while slide s0 (the chapter cover) is
+      // active, regardless of the device/browser language.
+      var s0 = document.getElementById('s0');
+      function syncVisibility(){
+        var active = s0 && s0.classList.contains('active');
+        widget.style.display = active ? 'block' : 'none';
+        if (!active) list.style.display = 'none';
       }
+      if (s0) {
+        var moLang = new MutationObserver(syncVisibility);
+        moLang.observe(s0, {attributes:true, attributeFilter:['class']});
+      }
+      syncVisibility();
+
+      toggle.addEventListener('click', function(){
+        list.style.display = (list.style.display === 'none') ? 'block' : 'none';
+      });
+
+      list.querySelectorAll('button[data-lang]').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var lang = btn.getAttribute('data-lang');
+          sessionStorage.setItem('preferredLang', lang);
+          toggleLabel.textContent = btn.getAttribute('data-label');
+          list.style.display = 'none';
+          applyLang(lang);
+        });
+      });
+
+      document.addEventListener('click', function(e){
+        if (!widget.contains(e.target)) list.style.display = 'none';
+      });
     } catch(e) { /* fail silently if storage/navigator unavailable */ }
   })();
 </script>
