@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1033,7 +1033,7 @@
       else if (devLang.indexOf('ar') === 0) detectedLang = 'ar';
 
       var savedGateLang = null;
-      try { savedGateLang = sessionStorage.getItem('gateLang'); } catch(e) {}
+      try { savedGateLang = localStorage.getItem('gateLang'); } catch(e) {}
       var gateLang = (savedGateLang === 'en' || savedGateLang === 'zh' || savedGateLang === 'ar')
         ? savedGateLang : detectedLang;
 
@@ -1063,7 +1063,7 @@
         switcher.querySelectorAll('button[data-gate-lang]').forEach(function(btn){
           btn.addEventListener('click', function(){
             var lang = btn.getAttribute('data-gate-lang');
-            try { sessionStorage.setItem('gateLang', lang); } catch(e) {}
+            try { localStorage.setItem('gateLang', lang); } catch(e) {}
             applyGateLang(lang);
           });
         });
@@ -1991,16 +1991,10 @@ m1730 -1437 c-132 -133 -309 -318 -394 -411 l-155 -167 -8 32 c-12 48 -35 77
     var loaded = false;
     function currentHbs3dLang(){
       try {
-        var saved = sessionStorage.getItem('preferredLang');
+        var saved = localStorage.getItem('preferredLang');
         if (saved === 'zh' || saved === 'en' || saved === 'ar') return saved;
       } catch(e) {}
-      // No explicit choice saved yet (e.g. the language-switcher widget never
-      // showed because the browser reports English) — fall back to whatever
-      // language the page itself is currently displaying, instead of
-      // silently defaulting to English.
-      var htmlLang = (document.documentElement.getAttribute('lang') || '').toLowerCase();
-      if (htmlLang.indexOf('zh') === 0) return 'zh';
-      if (htmlLang.indexOf('ar') === 0) return 'ar';
+      // No explicit manual choice saved yet — always default to English.
       return 'en';
     }
     function buildFrameHtml(lang){
@@ -2128,17 +2122,18 @@ m1730 -1437 c-132 -133 -309 -318 -394 -411 l-155 -167 -8 32 c-12 48 -35 77
     // slide (s0), regardless of the device/browser language. Starts as a
     // compact rectangle; clicking it opens the list.
     try {
-      var devLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
-      var isEnglish = devLang.indexOf('en') === 0;
       var widget = document.getElementById('langWidget');
       var toggle = document.getElementById('langToggle');
       var toggleLabel = document.getElementById('langToggleLabel');
       var list = document.getElementById('langList');
 
-      var savedLang = sessionStorage.getItem('preferredLang');
-      // Default to the browser's language when nothing has been chosen yet,
-      // instead of always falling back to Chinese.
-      var initialLang = savedLang || (isEnglish ? 'en' : 'zh');
+      // Language is always English by default, on every device, regardless
+      // of browser/OS locale. It only changes when the user manually picks
+      // one from the widget, and that manual choice is remembered across
+      // sessions/devices via localStorage (not just the current tab).
+      var savedLang = null;
+      try { savedLang = localStorage.getItem('preferredLang'); } catch(e) {}
+      var initialLang = (savedLang === 'zh' || savedLang === 'en' || savedLang === 'ar') ? savedLang : 'en';
       var initialBtn = list.querySelector('button[data-lang="' + initialLang + '"]');
       if (initialBtn) toggleLabel.textContent = initialBtn.getAttribute('data-label');
 
@@ -2187,7 +2182,7 @@ m1730 -1437 c-132 -133 -309 -318 -394 -411 l-155 -167 -8 32 c-12 48 -35 77
       list.querySelectorAll('button[data-lang]').forEach(function(btn){
         btn.addEventListener('click', function(){
           var lang = btn.getAttribute('data-lang');
-          sessionStorage.setItem('preferredLang', lang);
+          try { localStorage.setItem('preferredLang', lang); } catch(e) {}
           toggleLabel.textContent = btn.getAttribute('data-label');
           list.style.display = 'none';
           applyLang(lang);
