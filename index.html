@@ -835,6 +835,16 @@
   .credit-box .cline a{
     color:#c7cbdb; text-decoration:none; border-bottom:1px dotted rgba(199,203,219,.4);
   }
+  .credit-col{
+    display:flex; flex-direction:column; align-items:stretch;
+  }
+  .credit-col .portfolio-btn{
+    display:block; width:100%;
+    margin-top:14px; text-align:center;
+    font-family:var(--display); font-weight:700; font-size:16px;
+    color:#fff; text-decoration:none; letter-spacing:.01em;
+    position:relative; z-index:2;
+  }
   .credit-box .qr-wrap{
     flex:none; width:88px; height:88px; background:#000;
     border-radius:4px; padding:6px; display:flex; align-items:center; justify-content:center;
@@ -1627,6 +1637,7 @@
       </div>
 
       <div class="credit-row">
+        <div class="credit-col">
         <div class="credit-box">
           <div class="credit-box-text">
             <span class="tag"><span class="i18n-en" style="display:none">Designed By</span><span class="i18n-zh">设计者</span><span class="i18n-ar" style="display:none">تصميم بإشراف</span></span>
@@ -1705,6 +1716,8 @@ m1730 -1437 c-132 -133 -309 -318 -394 -411 l-155 -167 -8 32 c-12 48 -35 77
 </svg></div>
           </div>
         </div>
+        <a class="portfolio-btn" href="https://engalixredha.github.io/Portfolio/" target="_blank" rel="noopener"><span class="i18n-en" style="display:none">Visit Online Portfolio</span><span class="i18n-zh">访问在线作品集</span><span class="i18n-ar" style="display:none">زيارة السيرة الذاتية عبر الإنترنت</span></a>
+        </div>
         <div class="credit-box">
           <div class="credit-box-text">
             <span class="tag"><span class="i18n-en" style="display:none">Supervised By</span><span class="i18n-zh">监督者</span><span class="i18n-ar" style="display:none">أشرف عليه</span></span>
@@ -1718,6 +1731,7 @@ m1730 -1437 c-132 -133 -309 -318 -394 -411 l-155 -167 -8 32 c-12 48 -35 77
           </div>
         </div>
       </div>
+
     </div>
 
     <div class="fixed-logos">
